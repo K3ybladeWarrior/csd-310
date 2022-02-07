@@ -1,7 +1,9 @@
-from pymongo import MongoClient
+import certifi
 
+from pymongo import MongoClient
+ca=certifi.where()
 url ="mongodb+srv://admin:admin@cluster0.4pih1.mongodb.net/Cluster0?retryWrites=true&w=majority"
-client = MongoClient(url)
+client = MongoClient(url, tlsCAFile=ca)
 db = client.pytech
 
 fred = {
