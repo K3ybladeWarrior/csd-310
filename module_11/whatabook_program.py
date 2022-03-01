@@ -1,3 +1,10 @@
+#Lucy Garcia
+#Data / Database security
+#whatabook_program.py
+#final project
+
+
+
 #connecting to database
 
 import mysql.connector
@@ -14,6 +21,7 @@ db = mysql.connector.connect(**config)
 db
 
 cursor = db.cursor()
+
 
 #drop tables if they exist
 cursor.execute("DROP TABLE IF EXISTS store")
