@@ -19,7 +19,7 @@ config = {
 
 #methods
 
-#display menu options
+#display menu options and accept user input
 def show_menu():
     print("\nWelcome to Whatabook!")
 
@@ -48,6 +48,7 @@ def show_books(_cursor):
     for book in books:
         print("  Book ID: {}\n  Book Name: {}\n  Author: {}\n  Details: {}\n".format(book[0], book[1], book[3], book[2]))
 
+#display location information
 def show_locations(_cursor):
     _cursor.execute("SELECT * FROM store")
 
@@ -59,17 +60,18 @@ def show_locations(_cursor):
         print("  Locale: {}\n".format(location[1]))
 
 
+#confirms user id exists, will exit if user does not exist. Otherwise, line 142 will still show the #account menu, but it will error out if user tries adding book to wishlist.
 def validate_user():   
     user_id = int(input("Please enter your User ID: "))
 
-    if user_id not in range(1,5,1):
+    if user_id not in range(1,4,1):
         print("Sorry, that User ID does not exist. Exiting program.")
         sys.exit(0)
 
-    
     return user_id
     sys.exit(0)
 
+#show menu after user id validated
 def show_account_menu():
     try:
         print("\nCustomer Menu")
@@ -79,9 +81,10 @@ def show_account_menu():
         return account_option
     except ValueError:
         print("\n  Invalid number, program terminated...\n")
-
         sys.exit(0)
 
+
+#Show wishlist if exists using inner joins
 def show_wishlist(_cursor, _user_id):
     _cursor.execute("SELECT user.user_id, user.first_name, user.last_name, book.book_id, book.book_name, book.author " + 
                     "FROM wishlist " + 
@@ -98,6 +101,7 @@ def show_wishlist(_cursor, _user_id):
         for book in wishlist:
             print("        Book Name: {}\n        Author: {}\n".format(book[4], book[5]))
 
+#display book options for adding to wishlist
 def show_books_to_add(_cursor, _user_id):
     query = ("SELECT * FROM book " +
             "WHERE book_id NOT IN (SELECT book_id FROM wishlist WHERE user_id = {})".format(_user_id))
@@ -113,6 +117,7 @@ def show_books_to_add(_cursor, _user_id):
     for book in books_to_add:
         print("Book Id: {}\nBook Name: {}\n".format(book[0], book[1]))
 
+#ability to add books to wishlist
 def add_book_to_wishlist(_cursor, _user_id, _book_id):
     _cursor.execute("INSERT INTO wishlist(user_id, book_id) VALUES({}, {})".format(_user_id, _book_id))
 
